@@ -23,6 +23,8 @@ class redis::params {
   $redis_max_clients = false
   $redis_timeout = 300         # 0 = disabled
   $redis_loglevel = 'notice'
+  $redis_log_directory = '/var/log'
+  $redis_pid_directory = '/var/run'
   $redis_databases = 16
   $redis_slowlog_log_slower_than = 10000 # microseconds
   $redis_slowlog_max_len = 1024
