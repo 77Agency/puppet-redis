@@ -80,6 +80,7 @@ define redis::instance (
   $redis_password = $redis::params::redis_password,
   $redis_log_directory = $redis::params::redis_log_directory,
   $redis_pid_directory = $redis::params::redis_pid_directory,
+  $redis_user = $redis::params::redis_user,
   $redis_saves = $redis::params::redis_saves
   ) {
 

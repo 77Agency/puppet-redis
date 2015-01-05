@@ -121,6 +121,9 @@ class redis (
     redis_slowlog_log_slower_than => $redis_slowlog_log_slower_than,
     redis_slowlog_max_len         => $redis_slowlog_max_len,
     redis_password                => $redis_password,
+    redis_pid_directory           => $redis_pid_directory,
+    redis_log_directory           => $redis_log_directory,
+    redis_user                    => $redis_user,
     redis_saves                   => $redis_saves,
   }
 

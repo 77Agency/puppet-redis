@@ -5,7 +5,12 @@ REDIS_PORT="<%= @redis_port %>"
 REDIS_BIND_ADDRESS="<%= @redis_bind_address ? @redis_bind_address : '127.0.0.1' %>"
 
 EXEC=<%= scope.lookupvar('redis::redis_bin_dir') %>/bin/redis-server
-CLIEXEC="<%= scope.lookupvar('redis::redis_bin_dir') %>/bin/redis-cli -h $REDIS_BIND_ADDRESS -p $REDIS_PORT <%= @redis_password ? '-a ' + @redis_password : '' %>"
+<% case  @operatingsystem %>
+<% when 'redhat','centos'%>
+CLIEXEC="runuser <%= @redis_user %> -c \"<%= scope.lookupvar('redis::redis_bin_dir') %>/bin/redis-cli -h $REDIS_BIND_ADDRESS -p $REDIS_PORT <%= @redis_password ? '-a ' + @redis_password : '' %>\""
+<% else %>
+CLIEXEC="su -s /bin/sh -c  '<%= scope.lookupvar('redis::redis_bin_dir') %>/bin/redis-cli -h $REDIS_BIND_ADDRESS -p $REDIS_PORT <%= @redis_password ? '-a ' + @redis_password : '' %>' <%= @redis_user %>"
+<%end %>
 PIDFILE="<%= @redis_pid_directory %>/redis_${REDIS_PORT}.pid"
 CONF="/etc/redis/${REDIS_PORT}.conf"
 
