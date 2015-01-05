@@ -4,15 +4,12 @@
 REDIS_PORT="<%= @redis_port %>"
 REDIS_BIND_ADDRESS="<%= @redis_bind_address ? @redis_bind_address : '127.0.0.1' %>"
 
-EXEC=<%= scope.lookupvar('redis::redis_bin_dir') %>/bin/redis-server
-<% case  @operatingsystem %>
-<% when 'redhat','centos'%>
-CLIEXEC="runuser <%= @redis_user %> -c \"<%= scope.lookupvar('redis::redis_bin_dir') %>/bin/redis-cli -h $REDIS_BIND_ADDRESS -p $REDIS_PORT <%= @redis_password ? '-a ' + @redis_password : '' %>\""
-<% else %>
-CLIEXEC="su -s /bin/sh -c  '<%= scope.lookupvar('redis::redis_bin_dir') %>/bin/redis-cli -h $REDIS_BIND_ADDRESS -p $REDIS_PORT <%= @redis_password ? '-a ' + @redis_password : '' %>' <%= @redis_user %>"
-<%end %>
+
+CLIEXEC="<%= scope.lookupvar('redis::redis_bin_dir') %>/bin/redis-cli -h $REDIS_BIND_ADDRESS -p $REDIS_PORT <%= @redis_password ? '-a ' + @redis_password : '' %>"
+
 PIDFILE="<%= @redis_pid_directory %>/redis_${REDIS_PORT}.pid"
 CONF="/etc/redis/${REDIS_PORT}.conf"
+EXEC="su -s /bin/sh -c '<%= scope.lookupvar('redis::redis_bin_dir') %>/bin/redis-server $CONF' <%= @redis_user %>"
 
 ###############
 
@@ -32,12 +29,20 @@ set -e
 
 start()
 {
+    if [ ! -d <% @redis_pid_directory %>  ]; then
+      install -d -m 0755 -o <%= @redis_user %> -g <%= @redis_user %> <%= @redis_pid_directory %>
+    fi
+    if [ ! -d <% @redis_log_directory %>  ]; then
+      install -d -m 0755 -o <%= @redis_user %> -g <%= @redis_user %> <%= @redis_log_directory %>
+    fi
+
+
     if [ -x $PIDFILE ]
     then
         echo "$PIDFILE exists, process is already running or crashed"
     else
         echo "Starting Redis server..."
-        $EXEC $CONF
+        $EXEC 
     fi
 }
 
