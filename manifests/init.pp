@@ -93,6 +93,8 @@ class redis (
   $redis_max_memory = $redis::params::redis_max_memory,
   $redis_max_clients = $redis::params::redis_max_clients,
   $redis_timeout = $redis::params::redis_timeout,
+  $redis_pid_directory = $redis::params::redis_pid_directory,
+  $redis_log_directory = $redis::params::redis_log_directory,
   $redis_loglevel = $redis::params::redis_loglevel,
   $redis_databases = $redis::params::redis_databases,
   $redis_slowlog_log_slower_than = $redis::params::redis_slowlog_log_slower_than,
