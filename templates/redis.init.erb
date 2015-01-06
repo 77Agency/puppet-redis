@@ -42,7 +42,7 @@ start()
         echo "$PIDFILE exists, process is already running or crashed"
     else
         echo "Starting Redis server..."
-        su -s '/bin/sh' -c $EXEC <%= @redis_user %>
+        su -s '/bin/sh' -c "$EXEC" <%= @redis_user %>
     fi
 }
 
